@@ -1,5 +1,5 @@
 <template>
-  <div class="about-page">
+  <div class="about-page cube-content">
     <AboutCV />
 
     <button class="back-button" @click="goBack">
@@ -11,7 +11,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import AboutCV from "../components/AboutCV.vue";
-
 
 const router = useRouter();
 const goBack = () => {

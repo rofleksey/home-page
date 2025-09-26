@@ -15,6 +15,7 @@ onMounted(() => {
     autoplay: true,
     cols: 50,
     rows: 20,
+    theme: 'rofleksey',
   });
 })
 </script>

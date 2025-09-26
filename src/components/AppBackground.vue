@@ -3,8 +3,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import {ref, onMounted, onUnmounted, watch} from "vue";
 import * as THREE from 'three';
+
+const BASE_ROTATION_SPEED = 0.001;
+const BASE_MOVEMENT_SPEED = 0.005;
+
+const TRANSITION_SPEED = 6.0
+const TRANSITION_ROTATION_FACTOR = 20
+const TRANSITION_MOVEMENT_FACTOR = 1
+
+interface Props {
+  transitionActive?: boolean;
+  transitionDirection?: 'left' | 'right';
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  transitionActive: false,
+  transitionDirection: 'right'
+});
 
 const canvasContainer = ref<HTMLElement>();
 
@@ -17,6 +34,13 @@ class HexagonParticleSystem {
   private renderer: THREE.WebGLRenderer;
   private particleSystem: THREE.Points | null;
   private animationId: number;
+
+  private targetRotationSpeed: number;
+  private targetMovementSpeed: number;
+  private currentRotationSpeed: number;
+  private currentMovementSpeed: number;
+  private transitionProgress: number;
+  private isTransitioning: boolean;
 
   constructor(container: HTMLElement) {
     this.scene = new THREE.Scene();
@@ -37,6 +61,13 @@ class HexagonParticleSystem {
 
     this.particleSystem = null;
     this.animationId = 0;
+
+    this.targetRotationSpeed = BASE_ROTATION_SPEED;
+    this.targetMovementSpeed = BASE_MOVEMENT_SPEED;
+    this.currentRotationSpeed = BASE_ROTATION_SPEED;
+    this.currentMovementSpeed = BASE_MOVEMENT_SPEED;
+    this.transitionProgress = 0;
+    this.isTransitioning = false;
 
     this.init(container);
   }
@@ -85,24 +116,81 @@ class HexagonParticleSystem {
     this.scene.add(this.particleSystem);
   }
 
-  private animate(): void {
-    this.animationId = requestAnimationFrame(() => this.animate());
+  public startTransition(): void {
+    this.isTransitioning = true;
+    this.targetRotationSpeed = BASE_ROTATION_SPEED * TRANSITION_ROTATION_FACTOR;
+    this.targetMovementSpeed = BASE_MOVEMENT_SPEED * TRANSITION_MOVEMENT_FACTOR;
+    this.transitionProgress = 0;
+  }
 
-    if (this.particleSystem) {
-      this.particleSystem.rotation.x += 0.0005;
-      this.particleSystem.rotation.y += 0.001;
+  public endTransition(): void {
+    this.targetRotationSpeed = BASE_ROTATION_SPEED;
+    this.targetMovementSpeed = BASE_MOVEMENT_SPEED;
+  }
 
-      const positions = this.geometry.attributes.position!.array as Float32Array;
-      const time = Date.now() * 0.0005;
+  private updateTransition(deltaTime: number): void {
+    if (this.isTransitioning) {
+      this.transitionProgress += deltaTime * TRANSITION_SPEED;
 
-      for (let i = 0; i < positions.length; i += 3) {
-        positions[i + 2]! += Math.sin(time + positions[i]!) * 0.005;
-        if (positions[i + 2]! > 4) positions[i + 2] = -4;
+      if (this.transitionProgress >= 1) {
+        this.transitionProgress = 1;
       }
+    } else {
+      this.transitionProgress -= deltaTime * TRANSITION_SPEED;
 
-      this.geometry.attributes.position!.needsUpdate = true;
-      this.renderer.render(this.scene, this.camera);
+      if (this.transitionProgress <= 0) {
+        this.transitionProgress = 0;
+      }
     }
+
+    const easedProgress = this.easeInOutCubic(this.transitionProgress);
+
+    this.currentRotationSpeed = THREE.MathUtils.lerp(
+      BASE_ROTATION_SPEED,
+      this.targetRotationSpeed,
+      easedProgress
+    );
+
+    this.currentMovementSpeed = THREE.MathUtils.lerp(
+      BASE_MOVEMENT_SPEED,
+      this.targetMovementSpeed,
+      easedProgress
+    );
+  }
+
+  private easeInOutCubic(t: number): number {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  private animate(): void {
+    const clock = new THREE.Clock();
+
+    const render = () => {
+      this.animationId = requestAnimationFrame(render);
+
+      const deltaTime = Math.min(clock.getDelta(), 0.1);
+
+      this.updateTransition(deltaTime);
+
+      if (this.particleSystem) {
+        this.particleSystem.rotation.x += this.currentRotationSpeed * 0.5;
+        this.particleSystem.rotation.y += this.currentRotationSpeed;
+
+        const positions = this.geometry.attributes.position!.array as Float32Array;
+        const time = Date.now() * 0.0005;
+
+        for (let i = 0; i < positions.length; i += 3) {
+          positions[i + 2]! += Math.sin(time + positions[i]!) * this.currentMovementSpeed;
+          if (positions[i + 2]! > 4) positions[i + 2] = -4;
+          if (positions[i + 2]! < -4) positions[i + 2] = 4;
+        }
+
+        this.geometry.attributes.position!.needsUpdate = true;
+        this.renderer.render(this.scene, this.camera);
+      }
+    };
+
+    render();
   }
 
   private onWindowResize(): void {
@@ -125,6 +213,16 @@ let particleSystem: HexagonParticleSystem | null = null;
 onMounted(() => {
   if (canvasContainer.value) {
     particleSystem = new HexagonParticleSystem(canvasContainer.value);
+  }
+});
+
+watch(() => props.transitionActive, (newVal) => {
+  if (particleSystem) {
+    if (newVal) {
+      particleSystem.startTransition();
+    } else {
+      particleSystem.endTransition();
+    }
   }
 });
 

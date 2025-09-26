@@ -23,17 +23,17 @@ body {
 
 .no-select {
   -webkit-user-select: none; /* Safari */
-  -moz-user-select: none;    /* Firefox */
-  -ms-user-select: none;     /* Internet Explorer/Edge */
-  user-select: none;         /* Standard syntax */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Standard syntax */
 
-  -webkit-user-drag: none;   /* Prevent dragging in WebKit browsers */
-  -khtml-user-drag: none;    /* Prevent dragging in Konqueror */
+  -webkit-user-drag: none; /* Prevent dragging in WebKit browsers */
+  -khtml-user-drag: none; /* Prevent dragging in Konqueror */
   -moz-user-user-drag: none; /* Prevent dragging in Firefox */
-  -o-user-drag: none;        /* Prevent dragging in Opera */
-  user-drag: none;           /* Standard syntax */
+  -o-user-drag: none; /* Prevent dragging in Opera */
+  user-drag: none; /* Standard syntax */
 
-  cursor: default;           /* Change cursor to default instead of text select */
+  cursor: default; /* Change cursor to default instead of text select */
 }
 
 .no-select * {
@@ -47,4 +47,49 @@ body {
   -moz-user-user-drag: none;
   -o-user-drag: none;
   user-drag: none;
+}
+
+.cube-content {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+
+.cube-transition-enter-active,
+.cube-transition-leave-active {
+  transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.cube-face {
+  opacity: 1;
+}
+
+html, body, #app {
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+  transform-style: preserve-3d;
+}
+
+.asciinema-player-theme-rofleksey {
+  --term-color-foreground: #f8f8f2 !important;
+  --term-color-background: #00000000 !important;
+  --term-color-0: #21222c !important;
+  --term-color-1: #ff5555 !important;
+  --term-color-2: #50fa7b !important;
+  --term-color-3: #f1fa8c !important;
+  --term-color-4: #bd93f9 !important;
+  --term-color-5: #ff79c6 !important;
+  --term-color-6: #8be9fd !important;
+  --term-color-7: #f8f8f2 !important;
+  --term-color-8: #6272a4 !important;
+  --term-color-9: #ff6e6e !important;
+  --term-color-10: #69ff94 !important;
+  --term-color-11: #ffffa5 !important;
+  --term-color-12: #d6acff !important;
+  --term-color-13: #ff92df !important;
+  --term-color-14: #a4ffff !important;
+  --term-color-15: #ffffff !important;
 }

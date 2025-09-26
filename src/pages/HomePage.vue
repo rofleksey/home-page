@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content cube-content">
     <HeroTitle />
     <HeroTagline />
     <NavigationLinks />
