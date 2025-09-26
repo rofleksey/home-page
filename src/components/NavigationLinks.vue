@@ -1,6 +1,6 @@
 <template>
   <div class="nav-links no-select">
-    <a href="https://github.com/rofleksey?tab=repositories" target="_blank" class="nav-link">Projects</a>
+    <a href="/#/projects" class="nav-link">Projects</a>
     <a href="/#/about" class="nav-link">About</a>
   </div>
 </template>

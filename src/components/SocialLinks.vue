@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGithub, faTelegram } from '@fortawesome/free-brands-svg-icons'
-import { faGift } from '@fortawesome/free-solid-svg-icons'
+import { faGift, faFilm } from '@fortawesome/free-solid-svg-icons'
 import { computed } from 'vue'
 
 interface SocialLink {

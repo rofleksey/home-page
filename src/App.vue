@@ -33,7 +33,10 @@ const transitionDirection = ref<'left' | 'right'>('right');
 const navigationHistory = ref<string[]>(['/']);
 
 const getFaceClass = (route: any) => {
-  return route.path === '/' ? 'front-face' : 'right-face';
+  if (route.path === '/') return 'front-face';
+  if (route.path === '/about') return 'right-face';
+  if (route.path === '/projects') return 'left-face';
+  return 'front-face';
 };
 
 const onTransitionEnter = (el: Element, done: () => void) => {
@@ -107,6 +110,10 @@ router.beforeEach((to, from, next) => {
 }
 
 .right-face {
+  transform: translateZ(0) rotateY(0deg);
+}
+
+.left-face {
   transform: translateZ(0) rotateY(0deg);
 }
 
