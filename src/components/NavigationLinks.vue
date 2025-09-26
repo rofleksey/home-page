@@ -1,7 +1,7 @@
 <template>
   <div class="nav-links no-select">
-    <a href="#projects" class="nav-link">Projects</a>
-    <a href="#about" class="nav-link">About</a>
+    <a href="https://github.com/rofleksey?tab=repositories" target="_blank" class="nav-link">Projects</a>
+    <a href="/#/about" class="nav-link">About</a>
   </div>
 </template>
 
@@ -21,11 +21,13 @@
   text-transform: uppercase;
   font-size: 0.9rem;
   letter-spacing: 1px;
+  cursor: pointer;
 }
 
 .nav-link:hover {
   background: #ff0000;
   box-shadow: 0 0 15px #ff0000;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

@@ -9,11 +9,11 @@
 </template>
 
 <script setup lang="ts">
-import HeroTitle from './HeroTitle.vue';
-import HeroTagline from './HeroTagline.vue';
-import NavigationLinks from './NavigationLinks.vue';
-import StatusMessage from './StatusMessage.vue';
-import SocialLinks from "./SocialLinks.vue";
+import HeroTagline from '../components/HeroTagline.vue';
+import NavigationLinks from '../components/NavigationLinks.vue';
+import StatusMessage from '../components/StatusMessage.vue';
+import SocialLinks from "../components/SocialLinks.vue";
+import HeroTitle from "../components/HeroTitle.vue";
 </script>
 
 <style scoped>

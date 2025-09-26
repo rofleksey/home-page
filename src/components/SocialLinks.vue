@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGithub, faTelegram } from '@fortawesome/free-brands-svg-icons'
+import { faGift } from '@fortawesome/free-solid-svg-icons'
 import { computed } from 'vue'
 
 interface SocialLink {
@@ -35,6 +36,11 @@ const socialLinks = computed<SocialLink[]>(() => [
     name: 'Telegram',
     url: 'https://t.me/rofleksey',
     icon: faTelegram
+  },
+  {
+    name: 'Wishlist',
+    url: 'https://ozon.ru/t/Lt6lRtg',
+    icon: faGift
   }
 ])
 </script>
