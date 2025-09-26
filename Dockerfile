@@ -1,11 +1,11 @@
-FROM node:18-alpine as builder
+FROM node:22-alpine as builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM node:18-alpine as production
+FROM node:22-alpine as production
 WORKDIR /app
 RUN npm install -g serve
 COPY --from=builder /app/dist ./dist
