@@ -164,7 +164,6 @@ const getCardStyle = (index: number) => {
     opacity: opacity.toString(),
     zIndex: index === activeIndex.value ? 100 :
       (index === prevIndex.value || index === nextIndex.value) ? 50 : 10,
-    pointerEvents: isTransitioning.value && index !== activeIndex.value ? 'none' : 'auto'
   };
 };
 
