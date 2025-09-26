@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rofleksey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .glitch-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0000 0%, #000 50%, #ff0000 100%);
+            opacity: 0.05;
+            animation: glitch 8s infinite linear;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .nickname {
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            margin-bottom: 1rem;
+            animation: textGlitch 3s infinite;
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #ccc;
+            border-top: 1px solid #ff0000;
+            border-bottom: 1px solid #ff0000;
+            padding: 0.5rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ff0000;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            color: #ff0000;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .status {
+            color: #ff0000;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        .footer {
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+            width: 100%;
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .link {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ff0000;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #ff0000;
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .link:hover::before {
+            left: 0;
+        }
+
+        .link:hover {
+            color: #000;
+        }
+
+        @keyframes glitch {
+            0% { transform: translateX(0) skewX(0); }
+            10% { transform: translateX(-5px) skewX(-5deg); }
+            20% { transform: translateX(5px) skewX(5deg); }
+            30% { transform: translateX(-5px) skewX(-5deg); }
+            40% { transform: translateX(5px) skewX(5deg); }
+            50% { transform: translateX(-5px) skewX(-5deg); }
+            60% { transform: translateX(5px) skewX(5deg); }
+            70% { transform: translateX(-5px) skewX(-5deg); }
+            80% { transform: translateX(5px) skewX(5deg); }
+            90% { transform: translateX(-5px) skewX(-5deg); }
+            100% { transform: translateX(0) skewX(0); }
+        }
+
+        @keyframes textGlitch {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-2px); }
+            20% { transform: translateX(2px); }
+            30% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            50% { transform: translateX(-2px); }
+            60% { transform: translateX(2px); }
+            70% { transform: translateX(-2px); }
+            80% { transform: translateX(2px); }
+            90% { transform: translateX(-2px); }
+        }
+
+        @media (max-width: 768px) {
+            .nickname {
+                font-size: 2.5rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrixCanvas"></canvas>
+    <div class="glitch-container"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="nickname">rofleksey</h1>
+            <div class="tagline">BACKEND GO DEVELOPER & FRONTEND HOBBYIST</div>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <h3>BACKEND ENGINEERING</h3>
+                <p>Specializing in Go development with expertise in distributed systems, microservices architecture, and high-performance applications. Building robust APIs and scalable infrastructure.</p>
+                <div class="status">Currently: Optimizing database queries</div>
+            </div>
+
+            <div class="card">
+                <h3>FRONTEND EXPERIMENTS</h3>
+                <p>Exploring modern web technologies and creating interactive experiences. Passionate about blending functionality with aesthetic design principles.</p>
+                <div class="status">Currently: Learning Three.js</div>
+            </div>
+
+            <div class="card">
+                <h3>UNFINISHED PROJECTS</h3>
+                <p>A collection of half-baked services and experimental applications. Each one represents a learning opportunity and a glimpse into creative problem-solving.</p>
+                <div class="status">42 projects in progress</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="links">
+                <a href="#" class="link">GITHUB</a>
+                <a href="#" class="link">LINKEDIN</a>
+                <a href="#" class="link">BLOG</a>
+                <a href="#" class="link">CONTACT</a>
+                <a href="#" class="link">PROJECTS</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            resizeCanvas();
+
+            const chars = '01';
+            const charArray = chars.split('');
+            const fontSize = 14;
+            let columns = canvas.width / fontSize;
+            const drops = [];
+
+            for (let i = 0; i < columns; i++) {
+                drops[i] = Math.random() * canvas.height;
+            }
+
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#ff0000';
+                ctx.font = fontSize + 'px Share Tech Mono';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = charArray[Math.floor(Math.random() * charArray.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            setInterval(drawMatrix, 35);
+
+            window.addEventListener('resize', function() {
+                resizeCanvas();
+                columns = canvas.width / fontSize;
+                drops.length = 0;
+                for (let i = 0; i < columns; i++) {
+                    drops[i] = Math.random() * canvas.height;
+                }
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const angleY = (x - centerX) / 25;
+                    const angleX = (centerY - y) / 25;
+
+                    card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateZ(10px)`;
+                });
+            });
+
+            document.addEventListener('mouseleave', function() {
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(card => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

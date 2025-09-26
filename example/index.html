@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rofleksey | Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #ff0033;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff0033;
+            text-shadow: 0 0 10px #ff0033, 0 0 20px #ff0033;
+            animation: glitch 5s infinite;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin-left: 2rem;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #ff0033;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff0033;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            text-shadow: 0 0 10px #ff0033;
+            animation: flicker 3s infinite alternate;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: #ccc;
+        }
+
+        .typing-text {
+            color: #ff0033;
+            border-right: 2px solid #ff0033;
+            animation: blink 0.7s infinite;
+            display: inline-block;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: transparent;
+            color: #ff0033;
+            border: 2px solid #ff0033;
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: #ff0033;
+            color: #000;
+            box-shadow: 0 0 20px #ff0033;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .card {
+            background: rgba(20, 20, 20, 0.7);
+            border: 1px solid #333;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: #ff0033;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 0, 51, 0.2);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: #ff0033;
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .card h3 {
+            color: #ff0033;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 2rem;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #ff0033;
+            transform: translateY(-5px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid #333;
+            margin-top: 3rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 0 0 10px #ff0033, 0 0 20px #ff0033;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                border-color: #ff0033;
+            }
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 0, 51, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 0, 51, 0);
+            }
+        }
+
+        /* Y2K specific elements */
+        .y2k-border {
+            border: 2px solid #ff0033;
+            padding: 10px;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .y2k-border::before, .y2k-border::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ff0033;
+        }
+
+        .y2k-border::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .y2k-border::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            background: #111;
+            padding: 10px 0;
+            margin: 2rem 0;
+            border-top: 1px solid #ff0033;
+            border-bottom: 1px solid #ff0033;
+        }
+
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 15s linear infinite;
+            color: #ff0033;
+            font-weight: bold;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(-100%, 0);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            nav li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Matrix Background -->
+    <canvas id="matrix-bg"></canvas>
+
+    <!-- Scanlines overlay for Y2K aesthetic -->
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">rofleksey</div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#work">Work</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section class="hero" id="home">
+            <h1>HELLO, I'M <span class="pulse">ROFLEKSEY</span></h1>
+            <p>DIGITAL CREATOR & FRONT-END DEVELOPER WITH A PASSION FOR Y2K AESTHETICS</p>
+            <p>I CREATE <span class="typing-text">DYNAMIC WEB EXPERIENCES</span></p>
+            <a href="#work" class="btn">VIEW MY WORK</a>
+        </section>
+
+        <div class="marquee">
+            <span>✦ WELCOME TO MY DIGITAL SPACE ✦ UNDER CONSTRUCTION ✦ GEO-CITIES VIBES ✦ BEST VIEWED IN 800X600 ✦</span>
+        </div>
+
+        <section class="y2k-border">
+            <h2 style="text-align: center; color: #ff0033; margin-bottom: 1rem;">MY DIGITAL REALM</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>WEB DEVELOPMENT</h3>
+                    <p>Creating interactive experiences with HTML, CSS, and JavaScript. Specializing in retro-futuristic designs.</p>
+                </div>
+                <div class="card">
+                    <h3>DIGITAL ART</h3>
+                    <p>Pixel art, glitch aesthetics, and cyberpunk-inspired visuals that push creative boundaries.</p>
+                </div>
+                <div class="card">
+                    <h3>UI/UX DESIGN</h3>
+                    <p>Designing intuitive interfaces with a focus on nostalgia and futuristic elements.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="social-links">
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-codepen"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+
+        <footer>
+            <p>© 2023 rofleksey | BEST VIEWED WITH INTERNET EXPLORER 5.0+</p>
+            <p>PAGE VIEWS: <span id="counter">00420</span> | LAST UPDATED: 09/23/2023</p>
+        </footer>
+    </div>
+
+    <script>
+        // Matrix background animation
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@%&*()[]{}";
+        const charArray = chars.split('');
+
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#ff0033';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+
+        // Typing effect
+        const typingElement = document.querySelector('.typing-text');
+        const phrases = [
+            'DYNAMIC WEB EXPERIENCES',
+            'Y2K-INSPIRED DESIGNS',
+            'RETRO-FUTURISTIC INTERFACES',
+            'GLITCH ART AESTHETICS'
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+
+            if (isDeleting) {
+                typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                setTimeout(type, 1000);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                setTimeout(type, 500);
+            } else {
+                setTimeout(type, isDeleting ? 50 : 100);
+            }
+        }
+
+        // Start typing effect after page loads
+        window.addEventListener('load', () => {
+            setTimeout(type, 1000);
+        });
+
+        // Update counter with random increment
+        const counter = document.getElementById('counter');
+        setInterval(() => {
+            let current = parseInt(counter.textContent);
+            current += Math.floor(Math.random() * 3);
+            counter.textContent = current.toString().padStart(5, '0');
+        }, 5000);
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
